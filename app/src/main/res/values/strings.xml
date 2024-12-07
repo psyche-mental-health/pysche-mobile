@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name" translatable="false">Psyche</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="edit">Edit Profile</string>
+    <string name="hello">Hello, </string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="languageValue">English</string>
+</resources>
