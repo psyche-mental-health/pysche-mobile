@@ -13,21 +13,6 @@
         android:theme="@style/Theme.Psyche"
         tools:targetApi="31">
         <activity
-            android:name=".views.settings.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.nearbypsychiatrist.NearbyPsychiatristActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.testhistory.TestHistoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.chat.ChatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.home.HomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".views.MainActivity"
             android:exported="true">
             <intent-filter>
