@@ -10,13 +10,17 @@ class HistoryAdapter(private val historyList: List<HistoryData>) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     class HistoryViewHolder(private val binding: HistoryCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(historyData: HistoryData) {
-            binding.tvSleep.text = "Sleep: ${historyData.sleep}"
-            binding.tvFatigue.text = "Fatigue: ${historyData.fatigue}"
-            binding.tvConcentration.text = "Concentration: ${historyData.concentration}"
-            binding.tvInterest.text = "Interest: ${historyData.interest}"
-        }
+    fun bind(historyData: HistoryData) {
+        binding.tvSleep.text = "Sleep:"
+        binding.tvSleepValue.text = historyData.sleep
+        binding.tvFatigue.text = "Fatigue:"
+        binding.tvFatigueValue.text = historyData.fatigue
+        binding.tvConcentration.text = "Concentration:"
+        binding.tvConcentrationValue.text = historyData.concentration
+        binding.tvInterest.text = "Interest:"
+        binding.tvInterestValue.text = historyData.interest
     }
+}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = HistoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)

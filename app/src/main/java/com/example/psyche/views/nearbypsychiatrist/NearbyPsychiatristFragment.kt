@@ -1,60 +1,150 @@
 package com.example.psyche.views.nearbypsychiatrist
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.psyche.R
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.psyche.BuildConfig
+import com.example.psyche.databinding.FragmentNearbyPsychiatristBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.net.PlacesClient
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class NearbyPsychiatristFragment : Fragment(), OnMapReadyCallback {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [NearbyPsychiatristFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class NearbyPsychiatristFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val viewModel: NearbyPsychiatristViewModel by viewModels()
+    private var _binding: FragmentNearbyPsychiatristBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var map: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var placesClient: PlacesClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nearby_psychiatrist, container, false)
+    ): View {
+        _binding = FragmentNearbyPsychiatristBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NearbyPsychiatristFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NearbyPsychiatristFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment =
+            childFragmentManager.findFragmentById(binding.map.id) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        // Initialize Places API before creating the PlacesClient
+        Places.initialize(requireContext(), BuildConfig.GOOGLE_MAPS_API_KEY)
+        placesClient = Places.createClient(requireContext())
+
+        checkLocationPermission()
+
+        // Initialize Places Client with hardcoded API key
+        viewModel.initializePlacesClient(BuildConfig.GOOGLE_MAPS_API_KEY)
+    }
+
+    private fun checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+        } else {
+            viewModel.setLocationPermissionGranted(true)
+            getDeviceLocation()
+        }
+    }
+
+    private fun getDeviceLocation() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                location?.let {
+                    val currentLatLng = LatLng(it.latitude, it.longitude)
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                    viewModel.fetchNearbyPsychiatrists(currentLatLng)
                 }
             }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                viewModel.setLocationPermissionGranted(true)
+                getDeviceLocation()
+            } else {
+                viewModel.setLocationPermissionGranted(false)
+            }
+        }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        viewModel.locationPermissionGranted.observe(viewLifecycleOwner) { granted ->
+            if (granted) {
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    map.isMyLocationEnabled = true
+                    getDeviceLocation()
+                }
+            }
+        }
+
+        viewModel.nearbyPsychiatrists.observe(viewLifecycleOwner) { psychiatrists ->
+            map.clear()
+            for (psychiatrist in psychiatrists) {
+                // Fetch place details to get the LatLng
+                placesClient.fetchPlace(
+                    FetchPlaceRequest.builder(
+                        psychiatrist.placeId,
+                        listOf(Place.Field.LAT_LNG)
+                    ).build()
+                )
+                    .addOnSuccessListener { response: FetchPlaceResponse ->
+                        response.place.latLng?.let { latLng: LatLng ->
+                            map.addMarker(MarkerOptions().position(latLng).title(psychiatrist.name))
+                        }
+                    }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
