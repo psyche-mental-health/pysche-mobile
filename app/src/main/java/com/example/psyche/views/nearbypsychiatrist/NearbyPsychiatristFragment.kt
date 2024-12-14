@@ -46,17 +46,21 @@ class NearbyPsychiatristFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment =
-            childFragmentManager.findFragmentById(binding.map.id) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+            childFragmentManager.findFragmentById(binding.map.id) as? SupportMapFragment
+        if (mapFragment == null) {
+            val newMapFragment = SupportMapFragment.newInstance()
+            childFragmentManager.beginTransaction().replace(binding.map.id, newMapFragment).commit()
+            newMapFragment.getMapAsync(this)
+        } else {
+            mapFragment.getMapAsync(this)
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
-        // Initialize Places API before creating the PlacesClient
         Places.initialize(requireContext(), BuildConfig.GOOGLE_MAPS_API_KEY)
         placesClient = Places.createClient(requireContext())
 
         checkLocationPermission()
 
-        // Initialize Places Client with hardcoded API key
         viewModel.initializePlacesClient(BuildConfig.GOOGLE_MAPS_API_KEY)
     }
 
@@ -74,7 +78,6 @@ class NearbyPsychiatristFragment : Fragment(), OnMapReadyCallback {
             )
         } else {
             viewModel.setLocationPermissionGranted(true)
-            getDeviceLocation()
         }
     }
 
@@ -127,7 +130,6 @@ class NearbyPsychiatristFragment : Fragment(), OnMapReadyCallback {
         viewModel.nearbyPsychiatrists.observe(viewLifecycleOwner) { psychiatrists ->
             map.clear()
             for (psychiatrist in psychiatrists) {
-                // Fetch place details to get the LatLng
                 placesClient.fetchPlace(
                     FetchPlaceRequest.builder(
                         psychiatrist.placeId,

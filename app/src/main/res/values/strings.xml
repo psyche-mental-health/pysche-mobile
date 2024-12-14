@@ -7,4 +7,17 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="language">Language</string>
     <string name="languageValue">English</string>
+    <string name="email">Email</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="ask_register">Dont have an accout? Register</string>
+    <string name="ask_login">Already have an account? Login</string>
+    <string name="here">here</string>
+    <string name="confirm_your_password">Retype your password again</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="name">Name</string>
+    <string name="enter_your_name">Enter your name</string>
 </resources>

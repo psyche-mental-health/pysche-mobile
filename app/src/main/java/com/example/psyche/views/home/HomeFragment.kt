@@ -1,5 +1,6 @@
 package com.example.psyche.views.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.psyche.databinding.FragmentHomeBinding
 import com.example.psyche.views.adapters.HistoryAdapter
 import com.example.psyche.views.components.HistoryData
+import com.example.psyche.views.mentalhealthtest.MentalHealthTestActivity
 
 class HomeFragment : Fragment() {
 
@@ -28,12 +30,15 @@ class HomeFragment : Fragment() {
 
         val dummyData = listOf(
             HistoryData("Good", "Low", "High", "Moderate"),
-            HistoryData("Need Attention", "Moderate", "Moderate", "High"),
-            HistoryData("Sleepy", "High", "Low", "Low")
         )
 
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewHistory.adapter = HistoryAdapter(dummyData)
+
+        binding.buttonStartTest.setOnClickListener {
+            val intent = Intent(activity, MentalHealthTestActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {
