@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1012777301653",
+    "project_id": "psyche-97",
+    "storage_bucket": "psyche-97.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012777301653:android:7b2c4ce1fdd5dc3b094d9c",
+        "android_client_info": {
+          "package_name": "com.example.psyche"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012777301653-hurv7cshsa6c6fed7fk8198eoemm595v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo2h0trUySR9r6sEKi7qvddDn3j02qp_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012777301653-hurv7cshsa6c6fed7fk8198eoemm595v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
