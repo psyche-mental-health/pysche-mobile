@@ -3,6 +3,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import java.util.UUID
 
 class LoginViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<Boolean>()
@@ -23,5 +24,9 @@ class LoginViewModel : ViewModel() {
                     _loginResult.value = false
                 }
             }
+    }
+
+    fun generateToken(): String {
+        return UUID.randomUUID().toString()
     }
 }

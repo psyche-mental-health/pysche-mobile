@@ -3,6 +3,7 @@ package com.example.psyche.views
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.psyche.R
@@ -14,23 +15,28 @@ import com.example.psyche.views.login.LoginActivity
 import com.example.psyche.views.nearbypsychiatrist.NearbyPsychiatristFragment
 import com.example.psyche.views.settings.SettingsFragment
 import com.example.psyche.views.testhistory.TestHistoryFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
 import com.example.psyche.helpers.ContextUtils
 import com.example.psyche.helpers.ThemeUtils
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
 
         val sessionManager = SessionManager(this)
-        if (!sessionManager.isLoggedIn()) {
+        val token = sessionManager.getToken()
+        if (token.isNullOrEmpty()) {
+            Log.d("MainActivity", "No valid token found, redirecting to LoginActivity")
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
             return
+        } else {
+            Log.d("MainActivity", "Valid token found, proceeding to MainActivity")
         }
 
         val sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE)

@@ -87,7 +87,8 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this, Observer { isSuccess ->
             if (isSuccess) {
                 val sessionManager = SessionManager(this)
-                sessionManager.setLogin(true)
+                val token = loginViewModel.generateToken()
+                sessionManager.setLogin(true, token)
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
