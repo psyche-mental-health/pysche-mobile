@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
-                    android:text="Never" />
+                    android:text="@string/never" />
 
                 <RadioButton
                     android:id="@+id/alwaysRadioButton"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:padding="0dp"
-                    android:text="Always" />
+                    android:text="@string/always" />
 
                 <RadioButton
                     android:id="@+id/oftenRadioButton"
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:padding="0dp"
-                    android:text="Often" />
+                    android:text="@string/often" />
 
                 <RadioButton
                     android:id="@+id/rarelyRadioButton"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:padding="0dp"
-                    android:text="Rarely" />
+                    android:text="@string/rarely" />
 
                 <RadioButton
                     android:id="@+id/sometimesRadioButton"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:padding="0dp"
-                    android:text="Sometimes" />
+                    android:text="@string/sometimes" />
 
                 <RadioButton
                     android:id="@+id/notAtAllRadioButton"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
                     android:padding="0dp"
-                    android:text="Not at all" />
+                    android:text="@string/not_at_all" />
             </RadioGroup>
         </LinearLayout>
     </LinearLayout>
@@ -102,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/green"
+        app:cardBackgroundColor="@color/primaryColor"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
 
@@ -128,10 +128,13 @@
                         android:id="@+id/tvSleep"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sleep:" />
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/quicksandbold"
+                        android:text="@string/sleep" />
 
                     <TextView
                         android:id="@+id/tvSleepValue"
+                        android:fontFamily="@font/quicksandmedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -146,12 +149,15 @@
                         android:id="@+id/tvFatigue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fatigue:" />
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/quicksandbold"
+                        android:text="@string/fatigue" />
 
                     <TextView
                         android:id="@+id/tvFatigueValue"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksandmedium"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -171,12 +177,15 @@
                         android:id="@+id/tvConcentration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Concentration:" />
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/quicksandbold"
+                        android:text="@string/concentration" />
 
                     <TextView
                         android:id="@+id/tvConcentrationValue"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksandmedium"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -189,12 +198,15 @@
                         android:id="@+id/tvInterest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Interest:" />
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/quicksandbold"
+                        android:text="@string/interest" />
 
                     <TextView
                         android:id="@+id/tvInterestValue"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksandmedium"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -203,7 +215,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="Prediction:" />
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksandbold"
+                android:text="@string/prediction" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

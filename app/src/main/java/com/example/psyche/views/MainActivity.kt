@@ -58,10 +58,6 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(TestHistoryFragment())
                     true
                 }
-                R.id.navigation_chat -> {
-                    loadFragment(ChatFragment())
-                    true
-                }
                 R.id.navigation_nearby -> {
                     loadFragment(NearbyPsychiatristFragment())
                     true

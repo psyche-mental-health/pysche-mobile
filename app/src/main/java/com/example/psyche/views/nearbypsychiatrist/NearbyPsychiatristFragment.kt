@@ -3,9 +3,12 @@ package com.example.psyche.views.nearbypsychiatrist
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -45,6 +48,22 @@ class NearbyPsychiatristFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+        }
+
+        val textView = TextView(context).apply {
+            text = "Nearby Psychiatrists"
+            textSize = 20f
+            setTextColor(resources.getColor(android.R.color.white, null))
+        }
+        binding.toolbar.addView(textView)
+        val layoutParams = textView.layoutParams as androidx.appcompat.widget.Toolbar.LayoutParams
+        layoutParams.gravity = Gravity.CENTER
+        textView.layoutParams = layoutParams
+
+
         val mapFragment =
             childFragmentManager.findFragmentById(binding.map.id) as? SupportMapFragment
         if (mapFragment == null) {

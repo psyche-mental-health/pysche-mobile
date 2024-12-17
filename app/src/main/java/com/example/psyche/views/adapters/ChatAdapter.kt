@@ -1,5 +1,6 @@
 package com.example.psyche.views.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,16 @@ class ChatAdapter(
         return when (viewType) {
             2 -> ResultViewHolder(binding)
             else -> ChatViewHolder(binding)
+        }
+    }
+
+    private fun getColorForValue(value: String): Int {
+        return when (value) {
+            "Fair" -> Color.parseColor("#538FDE")
+            "Good" -> Color.parseColor("#007361")
+            "Bad" -> Color.parseColor("#68380F")
+            "Need Attention" -> Color.parseColor("#F92D26")
+            else -> Color.parseColor("#000000")
         }
     }
 
@@ -77,6 +88,11 @@ class ChatAdapter(
             holder.binding.tvInterestValue.text = resultData[2].split(": ")[1]
             holder.binding.tvConcentrationValue.text = resultData[3].split(": ")[1]
             holder.binding.tvPredictedClassName.text = resultData[4].split(": ")[1]
+
+            holder.binding.tvSleepValue.setTextColor(getColorForValue(resultData[0].split(": ")[1]))
+            holder.binding.tvFatigueValue.setTextColor(getColorForValue(resultData[1].split(": ")[1]))
+            holder.binding.tvInterestValue.setTextColor(getColorForValue(resultData[2].split(": ")[1]))
+            holder.binding.tvConcentrationValue.setTextColor(getColorForValue(resultData[3].split(": ")[1]))
         }
     }
 

@@ -17,6 +17,9 @@ import com.google.firebase.ml.modeldownloader.DownloadType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MentalHealthTestActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMentalHealthTestBinding
@@ -25,6 +28,8 @@ class MentalHealthTestActivity : AppCompatActivity() {
     private val selectedAnswers = mutableMapOf<Int, String>()
     private lateinit var adapter: ChatAdapter
     private var interpreter: Interpreter? = null
+    private val firestore = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     private val answerValues = mapOf(
         "Never" to 1,
@@ -39,6 +44,7 @@ class MentalHealthTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMentalHealthTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         adapter = ChatAdapter(chatItems, selectedAnswers)
         binding.recyclerView.adapter = adapter
@@ -88,7 +94,7 @@ class MentalHealthTestActivity : AppCompatActivity() {
         return when {
             answer1 == 1 && (answer2 == null || answer2 == 1) -> "Good"
             answer1 == 5 || answer1 == 6 || (answer2 != null && (answer2 == 5 || answer2 == 6)) -> "Fair"
-            answer1 == 2 || answer1 == 3 || (answer2 != null && (answer2 == 2 || answer2 == 3)) -> "Bad"
+            answer1 == 2 || answer1 == 3 || answer1 == 4 || (answer2 != null && (answer2 == 2 || answer2 == 3 || answer2 == 4)) -> "Bad"
             answer1 == 2 || (answer2 != null && answer2 == 2) -> "Need Attention"
             else -> "Unknown"
         }
@@ -157,5 +163,42 @@ class MentalHealthTestActivity : AppCompatActivity() {
         chatItems.add(ChatItem(resultText, false, true))
         adapter.notifyDataSetChanged()
         binding.recyclerView.scrollToPosition(chatItems.size - 1)
+
+        saveResultToFirestore(sleep, fatigue, interest, concentration, displayText)
     }
+
+    private fun saveResultToFirestore(
+        sleep: String,
+        fatigue: String,
+        interest: String,
+        concentration: String,
+        predictedClassName: String
+    ) {
+        val user = auth.currentUser
+        if (user != null) {
+            val resultData = hashMapOf(
+                "sleep" to sleep,
+                "fatigue" to fatigue,
+                "interest" to interest,
+                "concentration" to concentration,
+                "prediction" to predictedClassName,
+                "timestamp" to System.currentTimeMillis()
+            )
+
+            firestore.collection("users")
+                .document(user.uid)  // Use user.uid instead of user.email
+                .collection("mental_health_results")
+                .add(resultData)
+                .addOnSuccessListener {
+                    Log.d("MentalHealthTest", "Result successfully saved to Firestore")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("MentalHealthTest", "Error saving result to Firestore", e)
+                }
+        } else {
+            Log.w("MentalHealthTest", "User is not authenticated")
+        }
+    }
+
+
 }

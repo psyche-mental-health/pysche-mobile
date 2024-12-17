@@ -17,5 +17,10 @@
         <item name="cornerSize">16dp</item>
     </style>
 
+    <style name="Theme.Psyche.ActionBar" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="android:fontFamily">@font/quicksandregular</item>
+    </style>
+
     <style name="Theme.Psyche" parent="Base.Theme.Psyche" />
 </resources>

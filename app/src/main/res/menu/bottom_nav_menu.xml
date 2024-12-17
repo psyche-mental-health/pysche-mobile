@@ -3,21 +3,21 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
-    <item
-        android:id="@+id/navigation_chat"
-        android:icon="@drawable/ic_chat"
-        android:title="Chat" />
+        android:title="@string/home" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_chat"-->
+<!--        android:icon="@drawable/ic_chat"-->
+<!--        android:title="Chat" />-->
     <item
         android:id="@+id/navigation_test_history"
         android:icon="@drawable/ic_test_history"
-        android:title="History" />
+        android:title="@string/history" />
     <item
         android:id="@+id/navigation_nearby"
         android:icon="@drawable/ic_nearby"
-        android:title="Nearby" />
+        android:title="@string/nearby" />
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:title="@string/settings" />
 </menu>
